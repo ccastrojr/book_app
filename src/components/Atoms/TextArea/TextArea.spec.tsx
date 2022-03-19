@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { TextArea } from '.';
 
-describe('Input component tests', () => {
+describe('Textarea component tests', () => {
   test('renders without crashing', () => {
     const { getByTestId } = render(<TextArea />);
 
@@ -24,9 +24,9 @@ describe('Input component tests', () => {
     );
 
     const wrapper = getByTestId('fake_wrapper');
-    const input = getByTestId('pure_textarea');
+    const textarea = getByTestId('pure_textarea');
 
-    userEvent.click(input);
+    userEvent.click(textarea);
     userEvent.click(wrapper);
   });
 });
