@@ -1,17 +1,34 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ReactComponent as Email } from 'common/assets/svgs/email.svg';
 import { ReactComponent as Key } from 'common/assets/svgs/key.svg';
 import { Input, Button, Checkbox } from 'components/Atoms';
 import { useAuth } from 'hooks/auth';
+import { useToast } from 'hooks/toast';
 
 import * as S from './styles';
 
 function SignIn() {
   const [rememberLogin, setRememberLogin] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const { signIn } = useAuth();
+  const { addToast } = useToast();
+
+  const handleLogIn = useCallback(() => {
+    if (email === '' || password === '') {
+      addToast({
+        type: 'error',
+        title: 'Preencha os dados para continuar',
+      });
+
+      return;
+    }
+
+    signIn();
+  }, [email, password, signIn]);
 
   return (
     <S.Container>
@@ -21,9 +38,19 @@ function SignIn() {
       </S.Header>
 
       <S.Form>
-        <Input type="email" placeholder="Digite seu e-mail" icon={<Email />} />
+        <Input
+          type="email"
+          placeholder="Digite seu e-mail"
+          icon={<Email />}
+          onChange={e => setEmail(e.target.value)}
+        />
 
-        <Input type="password" placeholder="Digite sua senha" icon={<Key />} />
+        <Input
+          type="password"
+          placeholder="Digite sua senha"
+          icon={<Key />}
+          onChange={e => setPassword(e.target.value)}
+        />
 
         <Checkbox
           data={{ name: 'remember_login', selected: rememberLogin }}
@@ -34,9 +61,9 @@ function SignIn() {
         <Button
           size="FULL"
           color="default"
-          type="submit"
+          type="button"
           onClick={() => {
-            signIn();
+            handleLogIn();
           }}
           data-testid="login_button"
         >
