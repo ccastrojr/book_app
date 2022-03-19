@@ -37,12 +37,17 @@ describe('SignIn page tests', () => {
     userEvent.click(rememberLogin);
   });
 
-  test('click to login', () => {
+  test('type email, password and click to login', () => {
     jest.spyOn(authMock, 'useAuth').mockReturnValue({
       ...dataMock,
       signIn: mockSignIn,
     });
-    const { getByTestId } = render(<SignIn />);
+    const { getByTestId, getAllByTestId } = render(<SignIn />);
+
+    const inputs = getAllByTestId('pure_input');
+
+    userEvent.type(inputs[0], 'test@email.com');
+    userEvent.type(inputs[1], 'password');
 
     const login = getByTestId('login_button');
     userEvent.click(login);
